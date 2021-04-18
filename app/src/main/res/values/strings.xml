@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SquareDirectory</string>
+
+
+    <string name="employees">employees</string>
+    <string name="employee">employee</string>
+</resources>
