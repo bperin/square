@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_employee_height"
+    android:layout_margin="25dp"
+    android:background="@drawable/list_employee_background"
+    android:padding="@dimen/list_employee_padding">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivListThumbnail"
+        android:layout_width="@dimen/thumbnail_width"
+        android:layout_height="@dimen/thumbnail_height" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/list_employee_padding"
+        android:layout_toEndOf="@id/ivListThumbnail"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvListName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="Brian Perin" />
+
+        <TextView
+            android:id="@+id/tvListEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="bperin42@gmail.com" />
+
+        <TextView
+            android:id="@+id/tvListPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="(415)602-5315" />
+
+        <TextView
+            android:id="@+id/tvListTeam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="Android" />
+
+        <TextView
+            android:id="@+id/tvListEmployeeType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="Full Time" />
+
+        <TextView
+            android:id="@+id/tvListBio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="3"
+            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris at congue libero, vitae commodo nibh. Integer eget leo pellentesque, imperdiet." />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+</RelativeLayout>

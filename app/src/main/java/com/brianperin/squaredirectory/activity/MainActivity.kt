@@ -1,13 +1,18 @@
 package com.brianperin.squaredirectory.activity
 
 import android.Manifest
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.brianperin.squaredirectory.R
 import com.brianperin.squaredirectory.fragment.EmployeesFragment
+import com.brianperin.squaredirectory.viewmodel.EmployeesViewModel
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 
 class MainActivity : AppCompatActivity() {
+
+    val employeesViewModel: EmployeesViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

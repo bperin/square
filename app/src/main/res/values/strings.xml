@@ -4,4 +4,7 @@
 
     <string name="employees">employees</string>
     <string name="employee">employee</string>
+
+    <string name="loading">Loading</string>
+    <string name="an_error_has_occured">An error has occured</string>
 </resources>

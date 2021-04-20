@@ -1,9 +1,15 @@
 package com.brianperin.squaredirectory.fragment
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import com.brianperin.squaredirectory.repo.EmployeesRepo
+import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import com.brianperin.squaredirectory.R
+import com.brianperin.squaredirectory.adapter.EmployeesAdapter
 import com.brianperin.squaredirectory.viewmodel.EmployeesViewModel
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 /**
  * Fragment responsible for syncing our views
@@ -12,7 +18,8 @@ import com.brianperin.squaredirectory.viewmodel.EmployeesViewModel
  */
 class EmployeesFragment() : BaseFragment() {
 
-    private val employeesViewModel = EmployeesViewModel()
+    private val employeesViewModel: EmployeesViewModel by activityViewModels()
+    private lateinit var employeesAdapter : EmployeesAdapter
 
     companion object {
         fun newInstance() = EmployeesFragment()
@@ -20,6 +27,11 @@ class EmployeesFragment() : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        employeesAdapter = EmployeesAdapter(this)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_employees, container, false)
     }
 
     /**
@@ -27,10 +39,6 @@ class EmployeesFragment() : BaseFragment() {
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        employeesViewModel.getEmployees().observe(viewLifecycleOwner, {
-            val employees = it.data
-        })
 
     }
 }

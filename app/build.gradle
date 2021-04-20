@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.brianperin.squaredirectory"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -40,13 +40,15 @@ android {
 dependencies {
 
     //core libs
-    implementation ("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version")
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
+    implementation "androidx.fragment:fragment-ktx:1.3.2"
+    implementation "androidx.activity:activity-ktx:1.2.2"
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'com.github.quickpermissions:quickpermissions-kotlin:0.4.1'
@@ -68,8 +70,13 @@ dependencies {
     //ui
     implementation "com.github.idanatz:OneAdapter:2.1.0"
     implementation 'com.facebook.fresco:fresco:2.4.0'
+    implementation ("com.github.bumptech.glide:glide:4.11.0")
 
     //logging
     implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    //validation
+    implementation 'org.valiktor:valiktor-core:0.12.0'
+
 
 }
