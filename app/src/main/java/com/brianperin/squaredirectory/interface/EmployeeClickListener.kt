@@ -4,5 +4,5 @@ import android.view.View
 import com.brianperin.squaredirectory.model.response.Employee
 
 interface EmployeeClickListener {
-    fun onClick(store: Employee?, view: Int?, position: View?)
+    fun onClick(employee: Employee, view: Int, position: View)
 }

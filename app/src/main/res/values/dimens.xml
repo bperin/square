@@ -5,4 +5,8 @@
     <dimen name="list_employee_height">200dp</dimen>
     <dimen name="list_employee_border_radius">10dp</dimen>
     <dimen name="list_employee_padding">10dp</dimen>
+    <dimen name="list_employee_margin_top_bottom">5dp</dimen>
+    <dimen name="list_employee_margin_left_right">15dp</dimen>
+    <dimen name="list_employee_icon_right_margin">5dp</dimen>
+    <dimen name="list_employee_icon_height">15dp</dimen>
 </resources>

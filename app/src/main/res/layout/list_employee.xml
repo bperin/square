@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/list_employee_height"
-    android:layout_margin="25dp"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/list_employee_margin_left_right"
+    android:layout_marginTop="@dimen/list_employee_margin_top_bottom"
+    android:layout_marginRight="@dimen/list_employee_margin_left_right"
+    android:layout_marginBottom="@dimen/list_employee_margin_top_bottom"
     android:background="@drawable/list_employee_background"
     android:padding="@dimen/list_employee_padding">
 
@@ -13,55 +17,94 @@
         android:layout_height="@dimen/thumbnail_height" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/layoutContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/list_employee_padding"
+        android:layout_marginStart="@dimen/list_employee_padding"
         android:layout_toEndOf="@id/ivListThumbnail"
         android:orientation="vertical">
+
 
         <TextView
             android:id="@+id/tvListName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             tools:text="Brian Perin" />
 
-        <TextView
-            android:id="@+id/tvListEmail"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            tools:text="bperin42@gmail.com" />
+            android:gravity="start|center_vertical"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tvListPhone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            tools:text="(415)602-5315" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/list_employee_icon_height"
+                android:layout_marginRight="@dimen/list_employee_icon_right_margin"
+                app:srcCompat="@drawable/ic_baseline_email_24" />
 
-        <TextView
-            android:id="@+id/tvListTeam"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            tools:text="Android" />
+            <TextView
+                android:id="@+id/tvListEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                tools:text="bperin42@gmail.com" />
 
-        <TextView
-            android:id="@+id/tvListEmployeeType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            tools:text="Full Time" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvListBio"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="3"
-            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris at congue libero, vitae commodo nibh. Integer eget leo pellentesque, imperdiet." />
+            android:gravity="start|center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/list_employee_icon_height"
+                android:layout_marginRight="@dimen/list_employee_icon_right_margin"
+                app:srcCompat="@drawable/ic_baseline_local_phone_24" />
+
+            <TextView
+                android:id="@+id/tvListPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                tools:text="(415)602-5315" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/list_employee_icon_height"
+                android:layout_marginRight="@dimen/list_employee_icon_right_margin"
+                app:srcCompat="@drawable/ic_baseline_group_24" />
+
+            <TextView
+                android:id="@+id/tvListTeam"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                tools:text="Android Full time" />
+
+        </LinearLayout>
+
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
+    <TextView
+        android:id="@+id/tvListBio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layoutContent"
+        android:ellipsize="end"
+        android:maxLines="3"
+        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris at congue libero, vitae commodo nibh. Integer eget leo pellentesque, imperdiet." />
 
 </RelativeLayout>

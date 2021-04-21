@@ -5,8 +5,6 @@
         <item name="colorPrimary">@color/grey_900</item>
         <item name="colorPrimaryVariant">@color/grey_900</item>
         <item name="colorOnPrimary">@color/grey_400</item>
-        <item name="android:background">@color/app_background</item>
-<!--        <item name="android:backgroundColor">@color/app_background</item>-->
         <!-- Secondary brand color. -->
 
         <!-- Status bar color. -->

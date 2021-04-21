@@ -1,62 +1,73 @@
 package com.brianperin.squaredirectory.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import androidx.lifecycle.*
 import com.brianperin.squaredirectory.model.response.Employee
+import com.brianperin.squaredirectory.model.response.Employees
 import com.brianperin.squaredirectory.network.Result
 import com.brianperin.squaredirectory.repo.EmployeesRepo
+import com.brianperin.squaredirectory.util.Constants
 import com.brianperin.squaredirectory.util.validate
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.valiktor.ConstraintViolationException
 import timber.log.Timber
+import java.util.*
+import kotlin.collections.HashMap
 
 
 class EmployeesViewModel : ViewModel() {
 
     private val employeesRepo = EmployeesRepo()
-    private var employees: List<Employee> = emptyList()
+    private lateinit var originalList: List<Employee>
+
+    var selected = MutableLiveData<Employee>()
+    var employeesResult = MutableLiveData<Result<Employees>>()
+
 
     init {
         getEmployees()
     }
 
+    fun getBy(sort: SortMethod) {
 
-    fun getEmployees(): LiveData<Result<List<Employee>>> {
-
-        return liveData(Dispatchers.IO) {
-
-            emit(Result.loading())
-
-            val response = employeesRepo.getEmployees()
-            employees = response.data?.employees!!
-            var status = response.status
-            var message: String? = null
-
-            //got success back need to validate objects if exception caught empty list
-            if (status == Result.Status.SUCCESS) {
-
-                try {
-                    employees.forEach { employee ->
-                        employee.validate()
-                    }
-                } catch (e: ConstraintViolationException) {
-                    e.printStackTrace()
-                    status = Result.Status.ERROR
-                    employees = emptyList()
-                    message = "malformed json"
-                }
-            }
-            emit(Result(status, employees, message))
-        }
+//        return sortedMap.get(sort)
     }
 
-    fun sortBy(sort: SortMethod): List<Employee> {
-        if (employees.isNotEmpty()) {
-            return employees.sortedBy { it.fullName }.toList()
+    private fun getEmployees() {
+
+        Timber.tag(Constants.TIMBER).d("fetching employees")
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            employeesResult.postValue(Result.loading())
+
+            val employeeResult = employeesRepo.getEmployees()
+            val status = employeeResult.status
+            val message: String? = null
+
+            if (status == Result.Status.SUCCESS) {
+
+                try { //validate 200 ok but data is ok
+                    employeeResult.data?.let { employees ->
+                        employees.employees.forEach {
+                            it.validate()
+                        }
+                    }
+                    val nameList: List<Employee>? = employeeResult.data?.employees?.sortedBy { it.fullName }
+
+                    employeesResult.postValue(Result(status, employeeResult.data, null))
+
+                } catch (e: ConstraintViolationException) {
+                    Timber.tag(Constants.TIMBER).e(e)
+                    employeesResult.postValue(Result(Result.Status.ERROR, null, e.constraintViolations.toString()))
+                }
+
+            } else if (status == Result.Status.ERROR) {
+                employeesResult.postValue(Result(Result.Status.ERROR, null, message))
+            }
+
+
         }
-        return employees.sortedBy { it.team }.toList()
-        return emptyList()
     }
 
     enum class SortMethod {
@@ -65,6 +76,6 @@ class EmployeesViewModel : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        Timber.tag("view model").d("cleared")
+        Timber.tag(Constants.TIMBER).d("cleared")
     }
 }

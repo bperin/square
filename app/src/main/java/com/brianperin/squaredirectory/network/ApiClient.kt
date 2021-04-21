@@ -1,6 +1,5 @@
 package com.brianperin.squaredirectory.network
 
-
 import com.brianperin.squaredirectory.BuildConfig
 import com.brianperin.squaredirectory.util.Constants
 import com.google.gson.GsonBuilder

@@ -7,5 +7,5 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Employees(
     @SerializedName("employees")
-    val employees: List<Employee> = emptyList()
+    var employees: List<Employee> = emptyList()
 ) : Parcelable

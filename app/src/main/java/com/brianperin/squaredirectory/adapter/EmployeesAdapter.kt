@@ -1,22 +1,26 @@
 package com.brianperin.squaredirectory.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.brianperin.squaredirectory.R
 import com.brianperin.squaredirectory.`interface`.EmployeeClickListener
 import com.brianperin.squaredirectory.model.response.Employee
+import com.brianperin.squaredirectory.util.toDisplay
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 
 /**
  * Standard recycler view
  */
-class EmployeesAdapter(context: Fragment) : RecyclerView.Adapter<EmployeesAdapter.ViewHolder>() {
-
+class EmployeesAdapter : RecyclerView.Adapter<EmployeesAdapter.ViewHolder>() {
+    private var context: Context? = null
     private var employees = listOf<Employee>() //avoid concurrent manipulation
     private lateinit var itemClickListener: EmployeeClickListener
 
@@ -34,10 +38,20 @@ class EmployeesAdapter(context: Fragment) : RecyclerView.Adapter<EmployeesAdapte
         notifyDataSetChanged()
     }
 
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        context = recyclerView.context
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        context = null
+    }
+
     /**
      * Custom click listener
      */
-    fun setListener(employeeClickListener: EmployeeClickListener) {
+    fun setClickListener(employeeClickListener: EmployeeClickListener) {
         this.itemClickListener = employeeClickListener
     }
 
@@ -50,10 +64,36 @@ class EmployeesAdapter(context: Fragment) : RecyclerView.Adapter<EmployeesAdapte
 
         val employee = employees[position]
 
-        val listener = itemClickListener
+        context?.let {
+            Glide.with(it)
+                .load(employee.photoSmall)
+//                .placeholderDrawable(ContextCompat.getDrawable(it,R.drawable.ic_baseline_person_24))
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .skipMemoryCache(true)
+                .into(holder.thumbnail);
+        }
 
-        holder.itemView.setOnClickListener {
-            listener.onClick(employee, position, it)
+        holder.name.text = employee.fullName
+        holder.email.text = employee.emailAddress
+
+        //nullables
+        employee.formattedNumber?.let {
+            holder.phone.text = employee.formattedNumber
+            holder.phone.visibility = View.VISIBLE
+        } ?: kotlin.run {
+            holder.phone.visibility = View.GONE
+        }
+        employee.biography?.let {
+            holder.bio.text = employee.biography
+            holder.phone.visibility = View.VISIBLE
+        } ?: run {
+            holder.phone.visibility = View.GONE
+        }
+
+        holder.team.text = employee.team + " " + employee.employeeType.toDisplay()
+
+        holder.itemView.setOnClickListener { view ->
+            itemClickListener.onClick(employee, position, view)
         }
     }
 
@@ -70,7 +110,6 @@ class EmployeesAdapter(context: Fragment) : RecyclerView.Adapter<EmployeesAdapte
         var email: TextView = itemView.findViewById<TextView>(R.id.tvListEmail)
         var phone: TextView = itemView.findViewById<TextView>(R.id.tvListPhone)
         var team: TextView = itemView.findViewById<TextView>(R.id.tvListTeam)
-        var type: TextView = itemView.findViewById<TextView>(R.id.tvListEmployeeType)
-        var bio: TextView = itemView.findViewById<TextView>(R.id.tvListTeam)
+        var bio: TextView = itemView.findViewById<TextView>(R.id.tvListBio)
     }
 }
