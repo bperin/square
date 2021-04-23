@@ -13,6 +13,8 @@ import com.brianperin.squaredirectory.model.response.Employee
 import com.brianperin.squaredirectory.network.Result
 import com.brianperin.squaredirectory.util.Constants
 import com.brianperin.squaredirectory.viewmodel.EmployeesViewModel
+import com.google.android.material.tabs.TabItem
+import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_employees.*
 import timber.log.Timber
 
@@ -40,6 +42,13 @@ class EmployeesFragment() : BaseFragment() {
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_sort_name)))
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_sort_team)))
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.tab_sort_type)))
+
+        tabLayout.addOnTabSelectedListener(tabClickListener)
 
         recyclerEmployees.layoutManager = LinearLayoutManager(context)
         recyclerEmployees.adapter = employeesAdapter
@@ -79,6 +88,27 @@ class EmployeesFragment() : BaseFragment() {
     private val employeeClickListener = object : EmployeeClickListener {
         override fun onClick(employee: Employee, view: Int, position: View) {
             Timber.tag(Constants.TIMBER).d(employee.id.toString())
+        }
+    }
+    private val tabClickListener = object : TabLayout.OnTabSelectedListener {
+        override fun onTabSelected(tab: TabLayout.Tab?) {
+            val position = tab?.position
+            Timber.tag(Constants.TIMBER).d(position.toString())
+
+            val method = when (position) {
+                0 -> EmployeesViewModel.SortMethod.NAME
+                1 -> EmployeesViewModel.SortMethod.TEAM
+                2 -> EmployeesViewModel.SortMethod.TYPE
+                else -> EmployeesViewModel.SortMethod.NAME
+            }
+            employeesViewModel.getEmployees(method)
+        }
+
+        override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+        }
+
+        override fun onTabReselected(tab: TabLayout.Tab?) {
         }
     }
 }

@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
         //call our get employees networking request, ur activity doesn't use the result
         //but the fragment will have the data quicker
-        employeesViewModel.getEmployees()
+        employeesViewModel.getEmployees(EmployeesViewModel.SortMethod.NAME)
 
     }
 
