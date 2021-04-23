@@ -1,5 +1,6 @@
 package com.brianperin.squaredirectory.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -38,6 +39,9 @@ class EmployeesAdapter : RecyclerView.Adapter<EmployeesAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
+    /**
+     * Get context here never pass context into an adapter
+     */
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         context = recyclerView.context
@@ -60,6 +64,7 @@ class EmployeesAdapter : RecyclerView.Adapter<EmployeesAdapter.ViewHolder>() {
         return ViewHolder(employeeView)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val employee = employees[position]
@@ -67,7 +72,8 @@ class EmployeesAdapter : RecyclerView.Adapter<EmployeesAdapter.ViewHolder>() {
         context?.let {
             Glide.with(it)
                 .load(employee.photoSmall)
-//                .placeholderDrawable(ContextCompat.getDrawable(it,R.drawable.ic_baseline_person_24))
+                .placeholder(R.drawable.ic_baseline_person_24)
+                .error(R.drawable.ic_baseline_person_24)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(true)
                 .into(holder.thumbnail);
