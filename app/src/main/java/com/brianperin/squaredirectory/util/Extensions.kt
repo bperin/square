@@ -2,6 +2,7 @@ package com.brianperin.squaredirectory.util
 
 import com.brianperin.squaredirectory.model.response.Employee
 import com.brianperin.squaredirectory.model.response.EmployeeType
+import com.brianperin.squaredirectory.model.response.Employees
 import org.valiktor.functions.hasSize
 import org.valiktor.functions.isEmail
 import org.valiktor.functions.isNotNull
@@ -15,6 +16,15 @@ fun Employee.validate() {
         validate(Employee::fullName).isNotNull()
         validate(Employee::phoneNumber).hasSize(10)
         validate(Employee::emailAddress).isEmail()
+    }
+}
+
+/**
+ * Validate entire array
+ */
+fun Employees.validate(){
+    this.employees.forEach { employee ->
+        employee.validate()
     }
 }
 
