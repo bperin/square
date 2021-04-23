@@ -1,6 +1,8 @@
 package com.brianperin.squaredirectory.viewmodel
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.brianperin.squaredirectory.model.response.Employee
 import com.brianperin.squaredirectory.model.response.Employees
 import com.brianperin.squaredirectory.network.Result
@@ -11,50 +13,39 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.valiktor.ConstraintViolationException
 import timber.log.Timber
-import java.util.*
-import kotlin.collections.HashMap
 
 
 class EmployeesViewModel : ViewModel() {
 
     private val employeesRepo = EmployeesRepo()
-    private lateinit var originalList: List<Employee>
+    private var employees: List<Employee> = emptyList()
 
     var selected = MutableLiveData<Employee>()
     var employeesResult = MutableLiveData<Result<Employees>>()
 
+    fun sort(sort: SortMethod) {
 
-    init {
-        getEmployees()
     }
 
-    fun getBy(sort: SortMethod) {
-
-//        return sortedMap.get(sort)
-    }
-
-    private fun getEmployees() {
+    /**
+     * First fetch of employees repo will return whats in memory but its not persisted to
+     * any type of cache
+     */
+     fun getEmployees() {
 
         Timber.tag(Constants.TIMBER).d("fetching employees")
 
         viewModelScope.launch(Dispatchers.IO) {
 
             employeesResult.postValue(Result.loading())
-
             val employeeResult = employeesRepo.getEmployees()
             val status = employeeResult.status
-            val message: String? = null
 
-            if (status == Result.Status.SUCCESS) {
+            if (status == Result.Status.SUCCESS) { //validate 200 ok but check if also valid
 
-                try { //validate 200 ok but data is ok
-                    employeeResult.data?.let { employees ->
-                        employees.employees.forEach {
-                            it.validate()
-                        }
-                    }
-                    val nameList: List<Employee>? = employeeResult.data?.employees?.sortedBy { it.fullName }
-
+                try {
+                    employeeResult.data?.validate()
+                    employees = employeeResult.data?.employees!!
                     employeesResult.postValue(Result(status, employeeResult.data, null))
 
                 } catch (e: ConstraintViolationException) {
@@ -62,11 +53,10 @@ class EmployeesViewModel : ViewModel() {
                     employeesResult.postValue(Result(Result.Status.ERROR, null, e.constraintViolations.toString()))
                 }
 
-            } else if (status == Result.Status.ERROR) {
-                employeesResult.postValue(Result(Result.Status.ERROR, null, message))
+            } else if (status == Result.Status.ERROR) { //true http error
+                Timber.tag(Constants.TIMBER).e(employeeResult.message)
+                employeesResult.postValue(Result(Result.Status.ERROR, null, employeeResult.message))
             }
-
-
         }
     }
 

@@ -16,8 +16,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        if (savedInstanceState == null) {
             showEmployeesFragment()
+        }
+
+        //call our get employees networking request, ur activity doesn't use the result
+        //but the fragment will have the data quicker
+        employeesViewModel.getEmployees()
 
     }
 

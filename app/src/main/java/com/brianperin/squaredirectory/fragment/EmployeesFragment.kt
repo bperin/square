@@ -30,16 +30,13 @@ class EmployeesFragment() : BaseFragment() {
         fun newInstance() = EmployeesFragment()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_employees, container, false)
     }
 
     /**
      * Fetch our employees once view exists
+     * update our ui as we observe the live data from the view model
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,12 +45,35 @@ class EmployeesFragment() : BaseFragment() {
         recyclerEmployees.adapter = employeesAdapter
         employeesAdapter.setClickListener(employeeClickListener)
 
+
         employeesViewModel.employeesResult.observe(viewLifecycleOwner, { result ->
+            when (result.status) {
+                Result.Status.SUCCESS -> showSuccessState()
+                Result.Status.ERROR -> showErrorState(result.message)
+                Result.Status.LOADING -> showLoadingState()
+
+            }
             if (result.status == Result.Status.SUCCESS) {
                 result.data?.let { employeesAdapter.setEmployees(it.employees) }
             }
         })
 
+    }
+
+    private fun showLoadingState() {
+        layoutLoading.visibility = View.VISIBLE
+        btnTryAgain.visibility = View.GONE
+        tvEmployeeMessage.text = getString(R.string.loading)
+    }
+
+    private fun showSuccessState() {
+        layoutLoading.visibility = View.GONE
+    }
+
+    private fun showErrorState(message: String?) {
+        layoutLoading.visibility = View.VISIBLE
+        btnTryAgain.visibility = View.VISIBLE
+        tvEmployeeMessage.text = message
     }
 
     private val employeeClickListener = object : EmployeeClickListener {
