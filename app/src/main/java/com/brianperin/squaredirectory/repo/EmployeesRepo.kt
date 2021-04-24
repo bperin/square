@@ -10,6 +10,7 @@ import com.brianperin.squaredirectory.network.Result
  * Repository layer for fetching list of employees
  * no caching network calls
  * here we could add a cache if we wanted
+ * Dont cache an error result
  */
 class EmployeesRepo() : BaseDataSource() {
 
@@ -17,11 +18,13 @@ class EmployeesRepo() : BaseDataSource() {
 
     suspend fun getEmployees(): Result<Employees> {
         return if (employeesResult == null) {
-            employeesResult = getResult { ApiClient.apiService.getEmployees() }
-            employeesResult as Result<Employees>
+            val result = getResult { ApiClient.apiService.getEmployees() }
+            if (result.status != Result.Status.ERROR) {
+                employeesResult = result
+            }
+            return result
         } else {
             employeesResult as Result<Employees>
         }
-
     }
 }
