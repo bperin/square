@@ -41,11 +41,6 @@ class EmployeeTest() {
     @get:Rule
     var coroutinesTestRule = CoroutineTestRule()
 
-    private var employeesViewModel: EmployeesViewModel = EmployeesViewModel()
-
-    @Mock
-    private lateinit var apiEmployeeObserver: Observer<Result<Employees>>
-
     private lateinit var mockWebServer: MockWebServer
 
 
@@ -54,19 +49,9 @@ class EmployeeTest() {
 
         MockitoAnnotations.initMocks(this)
 
-        employeesViewModel.getEmployees(null);
-        employeesViewModel.employeesResult.observeForever(apiEmployeeObserver)
-
         mockWebServer = MockWebServer()
         mockWebServer.start()
 
-    }
-
-    @Test
-    fun `test our result is not throwing an error`() {
-
-        Mockito.verify(apiEmployeeObserver).onChanged(Result(Result.Status.LOADING, null, null)).wait()
-        Mockito.verify(apiEmployeeObserver).onChanged(Result(Result.Status.SUCCESS, null, null))
     }
 
     @Test
