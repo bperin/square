@@ -11,7 +11,7 @@ import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
 
 class MainActivity : AppCompatActivity() {
 
-    val employeesViewModel: EmployeesViewModel by viewModels()
+    private val employeesViewModel: EmployeesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -11,7 +11,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Employees(
     @SerializedName("employees")
-    var employees: List<Employee> = emptyList<Employee>()
+    var employees: List<Employee> = emptyList()
 ) : Parcelable {
     fun sortByName() {
         employees = employees.sortedBy { it.fullName }
