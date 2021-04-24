@@ -19,7 +19,7 @@ class EmployeesRepo() : BaseDataSource() {
     suspend fun getEmployees(): Result<Employees> {
         return if (employeesResult == null) {
             val result = getResult { ApiClient.apiService.getEmployees() }
-            if (result.status != Result.Status.ERROR) {
+            if (result.status == Result.Status.SUCCESS) {
                 employeesResult = result
             }
             return result
