@@ -13,9 +13,10 @@ interface ApiInterface {
     @GET("sq-mobile-interview/employees.json")
     suspend fun getEmployees(): Response<Employees>
 
+    //these would be removed once integration testing is available
     @GET("sq-mobile-interview/employees_malformed.json")
     suspend fun getMalformedEmployees(): Response<Employees>
 
-    @GET("sq-mobile-interview/employees.json")
+    @GET("sq-mobile-interview/employees_empty.json")
     suspend fun getEmptyEmployees(): Response<Employees>
 }
