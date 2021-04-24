@@ -3,12 +3,8 @@ package com.brianperin.squaredirectory.model.response
 import android.os.Build
 import android.os.Parcelable
 import android.telephony.PhoneNumberUtils
-import androidx.annotation.NonNull
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
-import org.jetbrains.annotations.NotNull
-import org.valiktor.functions.isNotNull
-import org.valiktor.validate
 import java.util.*
 
 /**

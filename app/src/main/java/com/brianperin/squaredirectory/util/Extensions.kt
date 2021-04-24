@@ -22,7 +22,7 @@ fun Employee.validate() {
 /**
  * Validate entire array
  */
-fun Employees.validate(){
+fun Employees.validate() {
     this.employees.forEach { employee ->
         employee.validate()
     }

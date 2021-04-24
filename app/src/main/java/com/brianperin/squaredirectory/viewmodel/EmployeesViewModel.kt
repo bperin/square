@@ -3,7 +3,6 @@ package com.brianperin.squaredirectory.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.brianperin.squaredirectory.model.response.Employee
 import com.brianperin.squaredirectory.model.response.Employees
 import com.brianperin.squaredirectory.network.Result
 import com.brianperin.squaredirectory.repo.EmployeesRepo

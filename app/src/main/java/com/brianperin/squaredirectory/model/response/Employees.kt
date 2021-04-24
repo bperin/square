@@ -21,7 +21,7 @@ data class Employees(
         employees = employees.sortedBy { it.team }
     }
 
-    fun sortByType(){
+    fun sortByType() {
         employees = employees.sortedBy { it.employeeType }
     }
 }

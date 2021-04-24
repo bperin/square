@@ -8,6 +8,6 @@ import kotlinx.android.parcel.Parcelize
  * the type of worker related to employee class
  */
 @Parcelize
-enum class EmployeeType(): Parcelable {
+enum class EmployeeType() : Parcelable {
     FULL_TIME, PART_TIME, CONTRACTOR
 }
