@@ -6,8 +6,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.brianperin.squaredirectory.R
 import com.brianperin.squaredirectory.fragment.EmployeesFragment
+import com.brianperin.squaredirectory.util.Constants
 import com.brianperin.squaredirectory.viewmodel.EmployeesViewModel
 import com.livinglifetechway.quickpermissions_kotlin.runWithPermissions
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,5 +41,10 @@ class MainActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.fragmentContainer, employeesFragment)
             .commit()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Timber.tag(Constants.TIMBER).d("main activity destroyed")
     }
 }
