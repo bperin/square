@@ -12,7 +12,7 @@ data class Result<out T>(val status: Status, val data: T?, val message: String?)
         SUCCESS,
         ERROR,
         LOADING,
-        EMPTY
+        EMPTY,
     }
 
     companion object {
@@ -36,6 +36,14 @@ data class Result<out T>(val status: Status, val data: T?, val message: String?)
             return Result(
                 Status.LOADING,
                 data,
+                null
+            )
+        }
+
+        fun <T> empty(): Result<T> {
+            return Result(
+                Status.EMPTY,
+                null,
                 null
             )
         }

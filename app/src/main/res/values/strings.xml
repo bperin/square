@@ -6,8 +6,9 @@
     <string name="employee">employee</string>
 
     <string name="loading">Loading</string>
-    <string name="an_error_has_occurred">An error has occurred</string>
+    <string name="an_error_has_occurred">Oops! something went wrong</string>
     <string name="try_again">Try Again</string>
+    <string name="empty">No results found</string>
 
     <string name="tab_sort_name">name</string>
     <string name="tab_sort_team">team</string>

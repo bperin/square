@@ -13,7 +13,6 @@ import com.brianperin.squaredirectory.model.response.Employee
 import com.brianperin.squaredirectory.network.Result
 import com.brianperin.squaredirectory.util.Constants
 import com.brianperin.squaredirectory.viewmodel.EmployeesViewModel
-import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_employees.*
 import timber.log.Timber
@@ -56,33 +55,51 @@ class EmployeesFragment() : BaseFragment() {
 
 
         employeesViewModel.employeesResult.observe(viewLifecycleOwner, { result ->
+            employeesAdapter.clearList()
             when (result.status) {
                 Result.Status.SUCCESS -> showSuccessState()
-                Result.Status.ERROR -> showErrorState(result.message)
+                Result.Status.ERROR -> showErrorState()
                 Result.Status.LOADING -> showLoadingState()
+                Result.Status.EMPTY -> showEmptyState()
 
             }
             if (result.status == Result.Status.SUCCESS) {
                 result.data?.let { employeesAdapter.setEmployees(it.employees) }
             }
+
         })
+
+        //click to retry could be timeout or data error
+        btnTryAgain.setOnClickListener {
+            employeesViewModel.getEmployees(EmployeesViewModel.SortMethod.NAME)
+        }
 
     }
 
     private fun showLoadingState() {
         layoutLoading.visibility = View.VISIBLE
+        progressLoading.visibility = View.VISIBLE
         btnTryAgain.visibility = View.GONE
         tvEmployeeMessage.text = getString(R.string.loading)
     }
 
     private fun showSuccessState() {
         layoutLoading.visibility = View.GONE
+        progressLoading.visibility = View.GONE
     }
 
-    private fun showErrorState(message: String?) {
+    private fun showErrorState() {
         layoutLoading.visibility = View.VISIBLE
         btnTryAgain.visibility = View.VISIBLE
-        tvEmployeeMessage.text = message
+        progressLoading.visibility = View.GONE
+        tvEmployeeMessage.text = getString(R.string.an_error_has_occurred)
+    }
+
+    private fun showEmptyState() {
+        layoutLoading.visibility = View.VISIBLE
+        btnTryAgain.visibility = View.VISIBLE
+        progressLoading.visibility = View.GONE
+        tvEmployeeMessage.text = getString(R.string.empty)
     }
 
     private val employeeClickListener = object : EmployeeClickListener {
@@ -94,6 +111,7 @@ class EmployeesFragment() : BaseFragment() {
         override fun onTabSelected(tab: TabLayout.Tab?) {
             val position = tab?.position
             Timber.tag(Constants.TIMBER).d(position.toString())
+            recyclerEmployees.smoothScrollToPosition(0)
 
             val method = when (position) {
                 0 -> EmployeesViewModel.SortMethod.NAME

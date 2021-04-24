@@ -24,9 +24,7 @@ import timber.log.Timber
 class EmployeesViewModel : ViewModel() {
 
     private val employeesRepo = EmployeesRepo()
-    var selected = MutableLiveData<Employee>()
     var employeesResult = MutableLiveData<Result<Employees>>()
-
 
     /**
      * First fetch of employees repo will return whats in memory but its not persisted to
@@ -55,16 +53,21 @@ class EmployeesViewModel : ViewModel() {
                             else -> employeeResult.data?.sortByName()
                         }
                     }
-                    employeesResult.postValue(Result(status, employeeResult.data, null))
-
+                    if (employeeResult.data?.employees.isNullOrEmpty()) {
+                        employeesResult.postValue(Result(Result.Status.EMPTY, null, null))
+                    } else {
+                        employeesResult.postValue(Result(status, employeeResult.data, null))
+                    }
                 } catch (e: ConstraintViolationException) {
                     Timber.tag(Constants.TIMBER).e(e)
-                    employeesResult.postValue(Result(Result.Status.ERROR, null, e.constraintViolations.toString()))
+                    employeesResult.postValue(Result(Result.Status.ERROR, Employees(emptyList()), e.constraintViolations.toString()))
+                    //we'll pprobably override the message to the user its not helpful and log the real issue
                 }
 
             } else if (status == Result.Status.ERROR) { //true http error
                 Timber.tag(Constants.TIMBER).e(employeeResult.message)
-                employeesResult.postValue(Result(Result.Status.ERROR, null, employeeResult.message))
+                employeesResult.postValue(Result(Result.Status.ERROR, Employees(emptyList()), employeeResult.message))
+                //same here in displaying the message
             }
         }
     }
