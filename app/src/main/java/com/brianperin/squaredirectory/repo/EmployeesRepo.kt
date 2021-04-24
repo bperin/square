@@ -22,6 +22,9 @@ class EmployeesRepo() : BaseDataSource() {
             if (result.status == Result.Status.SUCCESS) {
                 employeesResult = result
             }
+            else if (result.status == Result.Status.ERROR){
+                employeesResult = null
+            }
             return result
         } else {
             employeesResult as Result<Employees>
