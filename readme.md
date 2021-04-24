@@ -12,7 +12,7 @@ viewmodel for easy rendering. Business logic and UI logic are stricly sepereated
 
 [MVVM architecture](https://developer.android.com/jetpack/guide)
 
-We have 4 main states for fetching datea 
+We have 4 main states for fetching data
 LOADING
 SUCCSSS
 ERROR 
@@ -30,11 +30,12 @@ Gradle gradle-6.7.1
 Thre is currently one fragment implementing the data from the endpoint howevever we're using a shared view model approach as it is easily extendable to other fragments
 and activities. Ie list -> detail view.
 
-UI is not totally standard the list items are unique. 
+UI is not totally standard, the list items are unique. 
 
-I generally built this with phone in mind instead of tablet without knowing context of what the extension would be. If it's an app more for a merchant tablet might be better,
-at the same time not everyone uses tables and you can achieve just as much on a regular device, either way its extendable to any form factor.
+I generally built this with phone in mind instead of tablet without knowing context of what the extension would be. If it's an app more for a merchant, the tablet might be better but as of now it wouldn't make a difference, simlply a list.
+
+Many people prefer tablets on the merget side, that would mainly be to make it easier for payment processing, however this is a list of internal employees so building for that seems more reasonable. Maybe you need to reach a colleage on your team, or get contact info. A tablet isn't necesarry for that. Search can be better implemented on a phone.
 
 Testing is limited to Unit testing for now, mocking servers and integration testing would take more time but definitely necessary. 
 
-What I tried to keep in mind is just the overall struct of not having a slow boot, the Activities and Views as "dumb" business logic is mostly in the view models but much can be offloaded into the repo layer as well. Also it looks nice :) 
+What I tried to keep in mind is just the overall struct of not having a slow boot, the Activities and Fragments, Views as "dumb". The business logic is mostly in the view models but much can be offloaded into the repo layer as well. Also it looks nice :) 
