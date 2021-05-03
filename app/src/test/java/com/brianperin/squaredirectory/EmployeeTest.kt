@@ -10,26 +10,20 @@ import com.brianperin.squaredirectory.network.Result
 import com.brianperin.squaredirectory.util.validate
 import com.brianperin.squaredirectory.viewmodel.EmployeesViewModel
 import com.google.gson.Gson
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertNotNull
+import junit.framework.Assert.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import okhttp3.internal.wait
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.MockitoAnnotations
+import org.mockito.*
 import org.mockito.junit.MockitoJUnitRunner
 import org.valiktor.ConstraintViolationException
-import java.net.HttpURLConnection
 import java.util.*
+
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -41,19 +35,67 @@ class EmployeeTest() {
     @get:Rule
     var coroutinesTestRule = CoroutineTestRule()
 
-    private lateinit var mockWebServer: MockWebServer
+    private val viewModel = EmployeesViewModel()
 
+    @Captor
+    private lateinit var argumentCaptor: ArgumentCaptor<Result<Employees>>
+
+    @Mock
+    private lateinit var observer: Observer<Result<Employees>>
 
     @Before
     fun setUp() {
-
         MockitoAnnotations.initMocks(this)
-
-        mockWebServer = MockWebServer()
-        mockWebServer.start()
-
+        viewModel.employeesResult.observeForever(observer)
     }
 
+    @Test
+    fun `test api is successful and body is ok`() = runBlocking {
+
+        val response = ApiClient.apiService.getEmployees()
+        val success = response.isSuccessful
+        val body = response.body()
+        body?.validate()
+
+        assertEquals(success, true)
+    }
+
+    @Test(expected = ConstraintViolationException::class)
+    fun `test api is successful but validation throws error`() = runBlocking {
+
+        val response = ApiClient.apiService.getMalformedEmployees()
+        val success = response.isSuccessful
+        val body = response.body()
+        body?.validate()
+
+        assertEquals(success, true)
+    }
+
+    @Test
+    fun `verify view model has observers`() {
+        assertTrue(viewModel.employeesResult.hasObservers())
+    }
+
+    @Test
+    fun `is live data emitting correct status updates`() {
+
+        viewModel.employeesResult.value = Result<Employees>(Result.Status.LOADING, null, null)
+
+        assertEquals(viewModel.employeesResult.value!!.status, Result.Status.LOADING)
+
+        viewModel.employeesResult.value = Result<Employees>(Result.Status.SUCCESS, null, null)
+
+        assertEquals(viewModel.employeesResult.value!!.status, Result.Status.SUCCESS)
+
+        viewModel.employeesResult.value = Result<Employees>(Result.Status.EMPTY, null, null)
+
+        assertEquals(viewModel.employeesResult.value!!.status, Result.Status.EMPTY)
+
+        viewModel.employeesResult.value = Result<Employees>(Result.Status.ERROR, null, null)
+
+        assertEquals(viewModel.employeesResult.value!!.status, Result.Status.ERROR)
+    }
+    
     @Test
     fun `read ok json`() {
         val reader = MockResponseFileReader("ok.json")
@@ -96,9 +138,9 @@ class EmployeeTest() {
     @Test
     fun `test our valid json for employees`() {
 
-        val malformedJsonBody = MockResponseFileReader("ok.json").content
+        val jsonBody = MockResponseFileReader("ok.json").content
 
-        val employees: Employees = Gson().fromJson(malformedJsonBody, Employees::class.java)
+        val employees: Employees = Gson().fromJson(jsonBody, Employees::class.java)
 
         employees.validate()
     }
@@ -121,6 +163,6 @@ class EmployeeTest() {
 
     @After
     fun tearDown() {
-        mockWebServer.shutdown()
+        viewModel.employeesResult.removeObserver(observer)
     }
 }
